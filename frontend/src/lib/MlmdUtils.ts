@@ -63,7 +63,8 @@ async function getTfxRunContext(argoWorkflowName: string): Promise<Context> {
   const pipelineName = argoWorkflowName
     .split('-')
     .slice(0, -1)
-    .join('_');
+    // .join('_');
+    .join('-');
   const runID = argoWorkflowName;
   // An example run context name is parameterized_tfx_oss.parameterized-tfx-oss-4rq5v.
   const tfxRunContextName = `${pipelineName}.${runID}`;
@@ -117,6 +118,7 @@ export async function getExecutionsFromContext(context: Context): Promise<Execut
 
 export enum KfpExecutionProperties {
   KFP_POD_NAME = 'kfp_pod_name',
+  POD_NAME = 'pod_name',
 }
 
 const EXECUTION_PROPERTY_REPOS = [ExecutionProperties, ExecutionCustomProperties];
@@ -143,6 +145,7 @@ export const ExecutionHelpers = {
   },
   getKfpPod(execution: Execution): string | number | undefined {
     return (
+      getResourceProperty(execution, KfpExecutionProperties.POD_NAME, true) ||
       getResourceProperty(execution, KfpExecutionProperties.KFP_POD_NAME) ||
       getResourceProperty(execution, KfpExecutionProperties.KFP_POD_NAME, true) ||
       undefined
