@@ -1,40 +1,40 @@
-FROM node:12.14.1 as build
+# This docker file starts server.py (located at src/apiserver/visualization)
+# which accepts a post request that resolves to html that depicts a specified
+# visualization. More details about this process can be found in the server.py
+# and exporter.py files in the directory specified above.
 
-ARG COMMIT_HASH
-ENV COMMIT_HASH=${COMMIT_HASH}
-ARG TAG_NAME
-ENV TAG_NAME=${TAG_NAME}
+# Copyright 2019-2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-ARG DATE
+# This image should be in sync with image in backend/src/apiserver/visualization/update_requirements.sh.
+FROM tensorflow/tensorflow:2.4.0
 
-WORKDIR ./src
+RUN apt-get update \
+  && apt-get install -y wget curl tar openssl
 
-COPY . .
+RUN curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz
+RUN mkdir -p /usr/local/gcloud
+RUN tar -C /usr/local/gcloud -xf /tmp/google-cloud-sdk.tar.gz
+RUN /usr/local/gcloud/google-cloud-sdk/install.sh
+ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
 
-WORKDIR ./frontend
+WORKDIR /src
 
-RUN npm ci && npm run postinstall
-RUN npm run build
+COPY backend/src/apiserver/visualization/requirements.txt /src
 
-RUN mkdir -p ./server/dist && \
-    echo ${COMMIT_HASH} > ./server/dist/COMMIT_HASH && \
-    echo ${DATE} > ./server/dist/BUILD_DATE && \
-    echo ${TAG_NAME} > ./server/dist/TAG_NAME
+RUN python3 -m pip install -r requirements.txt --no-cache-dir
 
-# Generate the dependency licenses files (one for the UI and one for the webserver),
-# concatenate them to one file under ./src/server
-RUN npm i -D license-checker
-RUN node gen_licenses . && node gen_licenses server && \
-    cat dependency-licenses.txt >> server/dependency-licenses.txt
+COPY backend/src/apiserver/visualization /src
 
-FROM node:12.14.1-alpine
-
-COPY --from=build ./src/frontend/server /server
-COPY --from=build ./src/frontend/build /client
-
-WORKDIR /server
-
-EXPOSE 3000
-RUN npm run build
-ENV API_SERVER_ADDRESS http://localhost:3001
-CMD node dist/server.js ../client/ 3000
+ENTRYPOINT [ "python3", "server.py" ]

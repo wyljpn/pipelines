@@ -178,6 +178,9 @@ func setPodSpecForTensorboard(view *viewerV1beta1.Viewer, s *corev1.PodSpec) {
 		fmt.Sprintf("--logdir=%s", view.Spec.TensorboardSpec.LogDir),
 		fmt.Sprintf("--path_prefix=/tensorboard/%s/", view.Name),
 	}
+	// Yulong 20221003
+	// Add this secret for accessing MinIO
+	c.EnvFromSource.SecretRef.LocalObjectReference.Name = "minio-s3-secret"
 
 	tfImageVersion := strings.Split(view.Spec.TensorboardSpec.TensorflowImage, ":")[1]
 	// This is needed for tf 2.0

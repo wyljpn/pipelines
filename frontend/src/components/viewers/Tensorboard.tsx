@@ -77,7 +77,7 @@ interface TensorboardViewerState {
 }
 
 // TODO(jingzhang36): we'll later parse Tensorboard version from mlpipeline-ui-metadata.json file.
-const DEFAULT_TENSORBOARD_VERSION = '2.0.0';
+const DEFAULT_TENSORBOARD_VERSION = '2.1.0';
 
 class TensorboardViewer extends Viewer<TensorboardViewerProps, TensorboardViewerState> {
   timerID: NodeJS.Timeout;
@@ -212,21 +212,21 @@ class TensorboardViewer extends Viewer<TensorboardViewerProps, TensorboardViewer
                   input={<Input id='grouped-select' />}
                   onChange={this.handleVersionSelect}
                 >
-                  <ListSubheader>Tensoflow 1.x</ListSubheader>
-                  <MenuItem value={'1.4.0'}>TensorFlow 1.4.0</MenuItem>
-                  <MenuItem value={'1.5.0'}>TensorFlow 1.5.0</MenuItem>
-                  <MenuItem value={'1.6.0'}>TensorFlow 1.6.0</MenuItem>
-                  <MenuItem value={'1.7.0'}>TensorFlow 1.7.0</MenuItem>
-                  <MenuItem value={'1.8.0'}>TensorFlow 1.8.0</MenuItem>
-                  <MenuItem value={'1.9.0'}>TensorFlow 1.9.0</MenuItem>
-                  <MenuItem value={'1.10.0'}>TensorFlow 1.10.0</MenuItem>
-                  <MenuItem value={'1.11.0'}>TensorFlow 1.11.0</MenuItem>
-                  <MenuItem value={'1.12.0'}>TensorFlow 1.12.0</MenuItem>
-                  <MenuItem value={'1.13.2'}>TensorFlow 1.13.2</MenuItem>
-                  <MenuItem value={'1.14.0'}>TensorFlow 1.14.0</MenuItem>
-                  <MenuItem value={'1.15.0'}>TensorFlow 1.15.0</MenuItem>
-                  <ListSubheader>TensorFlow 2.x</ListSubheader>
-                  <MenuItem value={'2.0.0'}>TensorFlow 2.0.0</MenuItem>
+                  {/*<ListSubheader>Tensoflow 1.x</ListSubheader>*/}
+                  {/*<MenuItem value={'1.4.0'}>TensorFlow 1.4.0</MenuItem>*/}
+                  {/*<MenuItem value={'1.5.0'}>TensorFlow 1.5.0</MenuItem>*/}
+                  {/*<MenuItem value={'1.6.0'}>TensorFlow 1.6.0</MenuItem>*/}
+                  {/*<MenuItem value={'1.7.0'}>TensorFlow 1.7.0</MenuItem>*/}
+                  {/*<MenuItem value={'1.8.0'}>TensorFlow 1.8.0</MenuItem>*/}
+                  {/*<MenuItem value={'1.9.0'}>TensorFlow 1.9.0</MenuItem>*/}
+                  {/*<MenuItem value={'1.10.0'}>TensorFlow 1.10.0</MenuItem>*/}
+                  {/*<MenuItem value={'1.11.0'}>TensorFlow 1.11.0</MenuItem>*/}
+                  {/*<MenuItem value={'1.12.0'}>TensorFlow 1.12.0</MenuItem>*/}
+                  {/*<MenuItem value={'1.13.2'}>TensorFlow 1.13.2</MenuItem>*/}
+                  {/*<MenuItem value={'1.14.0'}>TensorFlow 1.14.0</MenuItem>*/}
+                  {/*<MenuItem value={'1.15.0'}>TensorFlow 1.15.0</MenuItem>*/}
+                  {/*<ListSubheader>TensorFlow 2.x</ListSubheader>*/}
+                  <MenuItem value={'2.1.0'}>TensorFlow 2.1.0</MenuItem>
                 </Select>
               </FormControl>
             </div>
