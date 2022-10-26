@@ -180,7 +180,17 @@ func setPodSpecForTensorboard(view *viewerV1beta1.Viewer, s *corev1.PodSpec) {
 	}
 	// Yulong 20221003
 	// Add this secret for accessing MinIO
-	c.EnvFromSource.SecretRef.LocalObjectReference.Name = "minio-s3-secret"
+	var envFromSource []corev1.EnvFromSource
+
+    envFromSource = append(envFromSource, corev1.EnvFromSource{
+                SecretRef: &corev1.SecretEnvSource{
+                    LocalObjectReference: corev1.LocalObjectReference{
+                        Name: "minio-s3-secret",
+                    },
+                },
+            })
+
+    c.EnvFrom = envFromSource
 
 	tfImageVersion := strings.Split(view.Spec.TensorboardSpec.TensorflowImage, ":")[1]
 	// This is needed for tf 2.0
